@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dinâmica Matemática - Enem</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --success-color: #2ecc71;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        h1 {
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+        }
+        
+        .question-counter {
+            color: var(--primary-color);
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .question-container {
+            margin-bottom: 25px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: var(--light-color);
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            transition: var(--transition);
+        }
+        
+        .question {
+            font-size: 18px;
+            font-weight: 500;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            background-color: var(--primary-color);
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+        }
+        
+        button:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        button:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .show-answer-btn {
+            background-color: var(--accent-color);
+            display: block;
+            margin: 0 auto 20px;
+        }
+        
+        .answer-container {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            border-left: 4px solid var(--success-color);
+        }
+        
+        .answer-title {
+            color: var(--success-color);
+            margin-bottom: 10px;
+        }
+        
+        .current-answer {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: var(--shadow);
+        }
+        
+        .all-answers {
+            margin-top: 20px;
+        }
+        
+        .all-answers h3 {
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .answers-list {
+            text-align: left;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .answers-list li {
+            margin-bottom: 10px;
+            padding: 8px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: var(--shadow);
+        }
+        
+        .toggle-answers {
+            background-color: var(--secondary-color);
+            margin-top: 15px;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .navigation {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            button {
+                width: 100%;
+            }
+            
+            .question {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Dinâmica Matemática – Resposta Rápida</h1>
+            <div class="question-counter" id="question-counter">Questão 1 de 10</div>
+        </header>
+        
+        <div class="question-container">
+            <div class="question" id="question"></div>
+        </div>
+        
+        <div class="navigation">
+            <button id="prev-btn" onclick="prevQuestion()">Anterior</button>
+            <button id="next-btn" onclick="nextQuestion()">Próxima</button>
+        </div>
+        
+        <button class="show-answer-btn" onclick="toggleCurrentAnswer()">Mostrar Resposta</button>
+        
+        <div class="answer-container" id="answer-container">
+            <h2 class="answer-title">Resposta da Questão Atual</h2>
+            <div class="current-answer" id="current-answer"></div>
+            
+            <div class="all-answers">
+                <h3>Todas as Respostas</h3>
+                <ol class="answers-list">
+                    <li>7/10</li>
+                    <li>R$ 1.157,63</li>
+                    <li>21</li>
+                    <li>x = 4, y = 2</li>
+                    <li>160π ≈ 502,65 cm³</li>
+                    <li>x = 3</li>
+                    <li>12</li>
+                    <li>150</li>
+                    <li>R$ 1.210</li>
+                    <li>Ana = 15, Bruno = 20</li>
+                </ol>
+            </div>
+            
+            <button class="toggle-answers" onclick="toggleAllAnswers()">Ocultar Respostas</button>
+        </div>
+        
+        <button class="toggle-answers" onclick="toggleAllAnswers()" id="show-all-btn">Mostrar Todas as Respostas</button>
+    </div>
+
+    <script>
+        const questions = [
+            "Uma urna contém 5 bolas vermelhas, 3 azuis e 2 verdes. Se uma bola é retirada aleatoriamente, qual é a probabilidade de ser vermelha ou verde?",
+            "Um capital de R$ 1.000,00 é aplicado a uma taxa de 5% ao ano, composta anualmente. Qual será o montante após 3 anos?",
+          "Determine as raízes da equação x² - 7x + 12 = 0.",
+            "Em uma progressão aritmética, o primeiro termo é 3 e a razão é 2. Qual é o 10º termo?",
+            "Resolva o sistema: 2x + y = 10, x - y = 2",
+            "Um cilindro tem raio 4 cm e altura 10 cm. Qual é o volume? (seja π = 3,14)",
+            "Quantas palavras podem ser formadas com as letras da palavra 'ENEM', considerando que letras repetidas não geram palavras distintas?",
+            "Analise o gráfico abaixo que mostra a venda de livros em uma livraria nos últimos 5 meses: Janeiro: 120, Fevereiro: 150, Março: 135, Abril: 165, Maio: 180. Qual foi a média de livros vendidos por mês?",
+            "Um investimento de R$ 1.000 rendeu 10% ao ano, capitalizado anualmente. Qual será o montante ao final de 2 anos?",
+            "A idade de Ana é 5 anos a mais que a metade da idade de Bruno. Se a soma das idades é 35 anos, qual é a idade de cada um?"
+        ];
+
+        const answers = [
+            "7/10",
+            "R$ 1.157,63",
+"x = 3 e 4",           
+"21",
+            "x = 4, y = 2",
+            "160π = 502,4 cm³",
+            "12",
+            "150",
+            "R$ 1.210",
+            "Ana = 15, Bruno = 20"
+        ];
+
+        let current = 0;
+        const questionDiv = document.getElementById('question');
+        const questionCounter = document.getElementById('question-counter');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const answerContainer = document.getElementById('answer-container');
+        const currentAnswer = document.getElementById('current-answer');
+        const showAllBtn = document.getElementById('show-all-btn');
+
+        function updateQuestion() {
+            questionDiv.innerHTML = `<strong>Questão ${current + 1}:</strong> ${questions[current]}`;
+            questionCounter.textContent = `Questão ${current + 1} de ${questions.length}`;
+            
+            // Atualizar estado dos botões de navegação
+            prevBtn.disabled = current === 0;
+            nextBtn.disabled = current === questions.length - 1;
+            
+            // Ocultar resposta da questão atual quando mudar
+            answerContainer.style.display = 'none';
+            showAllBtn.textContent = 'Mostrar Todas as Respostas';
+        }
+
+        function nextQuestion() {
+            if (current < questions.length - 1) {
+                current++;
+                updateQuestion();
+            }
+        }
+
+        function prevQuestion() {
+            if (current > 0) {
+                current--;
+                updateQuestion();
+            }
+        }
+
+        function toggleCurrentAnswer() {
+            currentAnswer.textContent = answers[current];
+            answerContainer.style.display = 'block';
+            showAllBtn.textContent = 'Ocultar Respostas';
+        }
+
+        function toggleAllAnswers() {
+            if (answerContainer.style.display === 'block') {
+                answerContainer.style.display = 'none';
+                showAllBtn.textContent = 'Mostrar Todas as Respostas';
+            } else {
+                currentAnswer.textContent = answers[current];
+                answerContainer.style.display = 'block';
+                showAllBtn.textContent = 'Ocultar Respostas';
+            }
+        }
+
+        // Inicializar
+        updateQuestion();
+    </script>
+</body>
+</html>
